@@ -1,0 +1,2 @@
+./dataset/32k/speaker0/BA_V_Aru_Memoriallobby_5.wav
+./dataset/32k/speaker0/BA_V_Aru_Newyear_Season_Newyear.wav
