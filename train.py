@@ -219,10 +219,14 @@ def train_and_evaluate(rank, epoch, hps, nets, optims, schedulers, scaler, loade
 
             if global_step % hps.train.eval_interval == 0:
                 evaluate(hps, net_g, eval_loader, writer_eval)
+                print(f"Evaluating at step: {global_step}")
+            if global_step % (hps.train.save_interval_factor * hps.train.eval_interval) == 0:
+                print(f"Caching at step: {global_step}")
                 utils.save_checkpoint(net_g, optim_g, hps.train.learning_rate, epoch,
-                                      os.path.join(hps.model_dir, "G_{}.pth".format(global_step)))
+                                        os.path.join(hps.model_dir, "G_{}.pth".format(global_step)))
                 utils.save_checkpoint(net_d, optim_d, hps.train.learning_rate, epoch,
-                                      os.path.join(hps.model_dir, "D_{}.pth".format(global_step)))
+                                        os.path.join(hps.model_dir, "D_{}.pth".format(global_step)))
+
 
                 keep_ckpts = getattr(hps.train, 'keep_ckpts', 0)
                 if keep_ckpts > 0:

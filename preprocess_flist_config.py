@@ -9,6 +9,7 @@ config_template = {
   "train": {
     "log_interval": 200,
     "eval_interval": 1000,
+    "save_interval_factor":10,
     "seed": 1234,
     "epochs": 10000,
     "learning_rate": 1e-4,
