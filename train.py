@@ -5,6 +5,7 @@ import json
 import argparse
 import itertools
 import math
+from multiprocessing import cpu_count
 import torch
 from torch import nn, optim
 from torch.nn import functional as F
@@ -28,6 +29,9 @@ from losses import (
 )
 
 from mel_processing import mel_spectrogram_torch, spec_to_mel_torch
+
+n_cores = cpu_count() - 1
+n_processes = n_cores * 2
 
 torch.backends.cudnn.benchmark = True
 global_step = 0
@@ -63,7 +67,7 @@ def run(rank, n_gpus, hps):
     torch.cuda.set_device(rank)
 
     train_dataset = TextAudioSpeakerLoader(hps.data.training_files, hps)
-    train_loader = DataLoader(train_dataset, num_workers=8, shuffle=False, pin_memory=True,
+    train_loader = DataLoader(train_dataset, num_workers=n_processes, shuffle=True, pin_memory=True,
                               batch_size=hps.train.batch_size)
     if rank == 0:
         eval_dataset = EvalDataLoader(hps.data.validation_files, hps)
